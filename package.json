@@ -1,20 +1,37 @@
 {
   "name": "@qntm-code/translation",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Translation Modules for Angular and NestJS",
+  "keywords": ["Translation", "Module", "Lazy", "Angular", "NestJS", "Nest"],
   "scripts": {
     "lint": "eslint src/**/* --ext .ts --ext .js",
     "test": "jest --coverage",
     "lint-staged": "lint-staged",
-    "build": "tsc -p ./tsconfig.build.json --outDir dist/",
+    "build": "tsc -p tsconfig.mjs.json && cpy package.mjs.json dist/mjs --rename package.json && tsc -p tsconfig.cjs.json && cpy package.cjs.json dist/cjs --rename package.json",
     "tidy-clean": "rm -rf dist coverage",
     "pre-commit": "lint-staged",
     "prepare-husky": "husky install",
     "upgrade-interactive": "npm-check --update"
   },
+  "lint-staged": {
+    "*.ts": ["prettier --print-width 140 --single-quote --trailing-comma es5 --parser typescript --write", "eslint --fix"],
+    "*.json": ["prettier --print-width 140 --single-quote --trailing-comma es5 --parser json --write"],
+    "*.md": ["prettier --write", "eslint --fix"]
+  },
   "author": "Ben Meyrick <bameyrick@gmail.com>",
-  "license": "ISC",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/mjs/index.js",
+  "types": "./dist/mjs/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/mjs/index.js",
+      "require": "./dist/cjs/index.js"
+    }
+  },
   "devDependencies": {
     "@angular/compiler": "^16.1.6",
     "@golevelup/ts-jest": "^0.4.0",
